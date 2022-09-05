@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+
+<body style="height:100vh; width:100vw; background-color:transparent;">
+
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+
+    .sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidenav {
+        padding-top: 15px;
+      }
+
+      .sidenav a {
+        font-size: 18px;
+      }
+    }
+  </style>
+  </head>
+
+  <body>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="javascript:void(0)" class="Abountbtn" onclick="Abountbtn()">About</a>
+      <a href="javascript:void(0)" class="LiveFeedbtn" onclick="LiveFeedbtn()">Live Feed</a>
+      <a href="javascript:void(0)" class="Infobtn" onclick="Infobtn()">Pakrking Information</a>
+      <a href="javascript:void(0)" class="Incomebtn" onclick="Incomebtn()">Total Income</a>
+    </div>
+
+    <h2>SMART PARKING IOT SYSTEM</h2>
+    <p>No Hassle Parking.</p>
+    <hr>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+
+      function LiveFeedbtn() {
+        $("#container").html("container").html(`
+        <div style="height:100vh; width:100vw">
+      <img src="/video" style="height:100vh; width:100vw">
+    </div>
+        `);
+
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+
+      function Infobtn() {
+        $("#container").html("container").html(`
+        <div style="height:100vh; width:100vw">
+      <div>
+        <h2>Total Number Of Parking Spots :   <span class='totalSpots' id='totalSpots'></span></h2>
+        <h2>Total Number Of Free Parking Spots :   <span class='freeSpots' id='freeSpots'></span></h2>
+        <h2>Total Number Of Free Parking Spots :   <span class='response' id='response'></span></h2>
+        </div>
+    </div>
+        `);
+
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+
+
+    <!-- <tr>
+      <td>
+
+        <div class='response' id='response'></div>
+      </td>
+    </tr> -->
+
+    <div class="container" id="container">
+
+    </div>
+
+
+  </body>
+  <script>
+    $(document).ready(function () {
+      window.addEventListener('load', (event) => {
+        setInterval(function () {
+          var the_id = event.target.id;
+          $.ajax({
+            url: "/",
+            type: "get",
+            data: { id: the_id },
+            success: function (response) {
+              console.log(response)
+              $("#freeSpots").html(JSON.stringify(response.length()));
+              $("#response").html(JSON.stringify(response));
+            },
+            error: function (xhr) {
+              console.log(xhr)
+            }
+          });
+        }, 1000);
+
+
+        setInterval(function () {
+          $.ajax({
+            url: "/allslots",
+            type: "get",
+            success: function (response) {
+              console.log(response)
+              $("#totalSpots").html(JSON.stringify(response.total));
+            },
+            error: function (xhr) {
+              console.log(xhr)
+            }
+          });
+        }, 1000);
+      });
+
+    });
+  </script>
+
+
+
+
+
+</html>
